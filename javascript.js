@@ -39,3 +39,7 @@ function operate(num1, num2, operator) {
             return null;
     }
 }
+
+
+// UI Creation
+
