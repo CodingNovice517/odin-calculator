@@ -7,7 +7,6 @@ let userNum1 = null;
 let userNum2 = null;
 let userOperator = null;
 
-
 // Basic Calculator Functions
 function add(num1, num2) {
     return num1 + num2;
@@ -40,6 +39,14 @@ function operate(num1, num2, operator) {
     }
 }
 
+// Event handling
+function handleClick(event) {
+    console.log(`You clicked ${event.target.textContent}`);
+}
 
-// UI Creation
+// Create element connections
+const display = document.querySelector('.calculator-display');
+const buttons = document.querySelectorAll('.calculator-btn');
 
+// Add event listeners
+buttons.forEach((button) => button.addEventListener('click', handleClick));
