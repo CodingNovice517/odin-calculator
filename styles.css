@@ -25,3 +25,14 @@ head, body {
     justify-content: flex-start;
     align-items: center;
 }
+
+.calculator-display {
+    display: flex;
+    height: 50px;
+    width: 280px;
+    border: 1px solid black;
+    margin: 10px;
+    padding: 10px;
+    justify-content: flex-end;
+    align-items: center;
+}
