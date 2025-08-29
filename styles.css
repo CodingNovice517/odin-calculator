@@ -16,3 +16,12 @@ head, body {
     align-items: center;
 }
 
+.calculator {
+    display: flex;
+    flex-direction: column;
+    height: 400px;
+    width: 300px;
+    border: 1px solid black;
+    justify-content: flex-start;
+    align-items: center;
+}
