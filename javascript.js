@@ -9,8 +9,15 @@ let userOperator = null;
 
 let curDisplayValue = "0";
 
+// Create element connections
+const display = document.querySelector('.calculator-display');
+const buttons = document.querySelectorAll('.calculator-btn');
+
+// Add event listeners
+buttons.forEach((button) => button.addEventListener('click', handleClick));
+
 // Button ids
-const BUTTON_OBJ = {
+const INPUT_MAP = {
     "btn-0": 0,
     "btn-1": 1,
     "btn-2": 2,
@@ -72,17 +79,10 @@ function operate(num1, num2, operator) {
     }
 }
 
-// Create element connections
-const display = document.querySelector('.calculator-display');
-const buttons = document.querySelectorAll('.calculator-btn');
-
-// Add event listeners
-buttons.forEach((button) => button.addEventListener('click', handleClick));
-
 
 // Event handling
 function mapUserInput(userInput) {
-    return BUTTON_OBJ[userInput];
+    return INPUT_MAP[userInput];
 }
 
 function getOperatorSymbol(operatorLabel) {
@@ -90,11 +90,14 @@ function getOperatorSymbol(operatorLabel) {
 }
 
 function handleClick(event) {
+    
     const mappedInput = mapUserInput(event.target.id);
     console.log(`You clicked ${mappedInput}`);
 
     if (mappedInput === "clear") {
         resetDisplay();
+        curResult = null;
+        userNum1 = null;
     }
 
     if (typeof mappedInput === "number") {
@@ -119,8 +122,6 @@ function handleClick(event) {
     }
 
     if (mappedInput === "equals") {
-        console.log(`num 1 ${userNum1}; type: ${typeof userNum1}`);
-        console.log(`num 2 ${userNum2}; type: ${typeof userNum2}`);
         curResult = operate(userNum1, userNum2, userOperator);
     }
 
@@ -131,7 +132,7 @@ function handleClick(event) {
         userNum1 = parseInt(tempResult);
     }
     else {
-        const curResult = [userNum1, getOperatorSymbol(userOperator), userNum2]
+        const curResult = [userNum1 === null ? 0 : userNum1, getOperatorSymbol(userOperator), userNum2]
             .filter(item => item != null)
             .join(" ");
         updateDisplay(curResult);
@@ -154,7 +155,6 @@ function resetDisplay() {
     resetState();
     curDisplayValue = "0";
     updateDisplay(curDisplayValue);
-    console.log(`Cur display value: ${curDisplayValue}`);
 }
 
 
