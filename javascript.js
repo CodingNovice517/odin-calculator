@@ -17,8 +17,10 @@ let curDisplayValue = "0";
 const display = document.querySelector('.calculator-display');
 const buttons = document.querySelectorAll('.calculator-btn');
 
-// Add event listeners
-buttons.forEach((button) => button.addEventListener('click', handleClick));
+// Add event listeners to buttons
+buttons.forEach((button) => button.addEventListener('click', handleInput));
+// Add keyboard event listener
+document.addEventListener("keydown", handleInput)
 
 // Button ids
 const INPUT_MAP = {
@@ -39,7 +41,24 @@ const INPUT_MAP = {
     "btn-add": "add",
     "btn-subtract": "subtract",
     "btn-equals": "equals",
-    "btn-decimal": "decimal"
+    "btn-decimal": "decimal",
+    "0": 0,
+    "1": 1,
+    "2": 2,
+    "3": 3,
+    "4": 4,
+    "5": 5,
+    "6": 6,
+    "7": 7,
+    "8": 8,
+    "9": 9,
+    "/": "divide",
+    "*": "multiply",
+    "+": "add",
+    "-": "subtract",
+    "Enter": "equals",
+    "Backspace": "back",
+    "Escape": "clear"
 }
 
 const OPERATORS = {
@@ -93,10 +112,54 @@ function getOperatorSymbol(operatorLabel) {
     return OPERATORS[operatorLabel];
 }
 
-function handleClick(event) {
-    
-    const mappedInput = mapUserInput(event.target.id);
+function handleNumberBackspace(num) {
+    let strValue = String(num);
+    let newNum = num;
+    if (strValue.length === 1)  {
+        newNum = null;
+    }
+    else {
+        newNum = parseInt(strValue.slice(0, strValue.length-1));
+    }
+    return newNum;
+}
+
+function handleInput(event) {
+    let mappedInput = null;
+    if (event.key === undefined) {
+        mappedInput = mapUserInput(event.target.id);
+    }
+    else {
+        mappedInput = mapUserInput(event.key);
+    }
     console.log(`You clicked ${mappedInput}`);
+
+    if (mappedInput === "back") {
+        if (userNum2DecPlaces) {
+            userNum2DecPlaces = handleNumberBackspace(userNum2DecPlaces);
+        }
+        else if (userNum2Dec) {
+            userNum2Dec = false;
+        }
+        else if (userNum2) {
+            userNum2 = handleNumberBackspace(userNum2);
+        }
+        else if (userOperator) {
+            userOperator = null;
+        }
+        else if (userNum1DecPlaces) {
+            userNum1DecPlaces = handleNumberBackspace(userNum1DecPlaces);
+        }
+        else if (userNum1Dec) {
+            userNum1Dec = false;
+        }
+        else if (userNum1) {
+            userNum1 = handleNumberBackspace(userNum1);
+        }
+        else {
+            resetDisplay();
+        }
+    }
 
     if (mappedInput === "clear") {
         resetDisplay();
