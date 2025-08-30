@@ -191,7 +191,7 @@ function handleInput(event) {
         else if (userNum2) {
             if (userNum2Dec) {
                 if (userNum2DecPlaces) {
-                    userNum12DecPlaces = parseFloat(String(userNum2DecPlaces) + String(mappedInput));
+                    userNum2DecPlaces = parseFloat(String(userNum2DecPlaces) + String(mappedInput));
                 }
                 else {
                     userNum2DecPlaces = mappedInput;
