@@ -4,7 +4,11 @@ let curResult = null;  // To store the result of the latest operation
 
 // Variables mainly used to perform an operation
 let userNum1 = null;
+let userNum1Dec = false;  // bool
+let userNum1DecPlaces = null;
 let userNum2 = null;
+let userNum2Dec = false;  // bool
+let userNum2DecPlaces = null;
 let userOperator = null;
 
 let curDisplayValue = "0";
@@ -35,7 +39,7 @@ const INPUT_MAP = {
     "btn-add": "add",
     "btn-subtract": "subtract",
     "btn-equals": "equals",
-    "btn-decimal": "."
+    "btn-decimal": "decimal"
 }
 
 const OPERATORS = {
@@ -105,13 +109,44 @@ function handleClick(event) {
             userNum1 = mappedInput;
         }
         else if (userNum1 && !userOperator) {
-            userNum1 = parseInt(String(userNum1) + String(mappedInput));
+            if (userNum1Dec) {
+                if (userNum1DecPlaces) {
+                    userNum1DecPlaces = parseFloat(String(userNum1DecPlaces) + String(mappedInput));
+                }
+                else {
+                    userNum1DecPlaces = mappedInput;
+                }
+            }
+            else {
+                userNum1 = parseFloat(String(userNum1) + String(mappedInput));
+            }
+
         }
         else if (userNum1 && !userNum2) {
             userNum2 = mappedInput;
         }
         else if (userNum2) {
-            userNum2 = parseInt(String(userNum2) + String(mappedInput));
+            if (userNum2Dec) {
+                if (userNum2DecPlaces) {
+                    userNum12DecPlaces = parseFloat(String(userNum2DecPlaces) + String(mappedInput));
+                }
+                else {
+                    userNum2DecPlaces = mappedInput;
+                }
+            }
+            else {
+                userNum2 = parseFloat(String(userNum2) + String(mappedInput));
+            }
+            
+        }
+    }
+
+    if (mappedInput === "decimal") {
+        if (userNum2 && !userNum2Dec) {
+            userNum2Dec = true;
+        }
+        else if (userNum1 && !userNum1Dec && !userOperator) {
+            userNum1Dec = true;
         }
     }
 
@@ -122,17 +157,27 @@ function handleClick(event) {
     }
 
     if (mappedInput === "equals") {
-        curResult = operate(userNum1, userNum2, userOperator);
+        let num1 = parseFloat(String(userNum1 ? userNum1 : "") + (userNum1Dec ? "." : "") + String(userNum1DecPlaces ? userNum1DecPlaces : ""));
+        let num2 = parseFloat(String(userNum2 ? userNum2 : "") + (userNum2Dec ? "." : "") + String(userNum2DecPlaces ? userNum2DecPlaces : ""));
+        curResult = operate(num1, num2, userOperator);
     }
 
     if (curResult) {
         let tempResult = curResult;
         updateDisplay(curResult);
         resetState();
-        userNum1 = parseInt(tempResult);
+        userNum1 = parseFloat(tempResult);
     }
     else {
-        const curResult = [userNum1 === null ? 0 : userNum1, getOperatorSymbol(userOperator), userNum2]
+        const curResult = [
+            userNum1 === null ? 0 : userNum1,
+            userNum1Dec? "." : "",
+            userNum1DecPlaces ? userNum1DecPlaces : "",
+            getOperatorSymbol(userOperator),
+            userNum2,
+            userNum2Dec ? "." : "",
+            userNum2DecPlaces ? userNum2DecPlaces : ""
+        ]
             .filter(item => item != null)
             .join(" ");
         updateDisplay(curResult);
@@ -147,7 +192,11 @@ function resetState() {
     curResult = null;
     userInput = null;
     userNum1 = null;
+    userNum1Dec = null;
+    userNum1DecPlaces = null;
     userNum2 = null;
+    userNum2Dec = null;
+    userNum2DecPlaces = null;
     userOperator = null;
 }
 
