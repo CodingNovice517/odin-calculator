@@ -171,11 +171,11 @@ function handleClick(event) {
     else {
         const curResult = [
             userNum1 === null ? 0 : userNum1,
-            userNum1Dec? "." : "",
+            userNum1Dec && (!userOperator || userNum1DecPlaces) ? "." : "",
             userNum1DecPlaces ? userNum1DecPlaces : "",
             getOperatorSymbol(userOperator),
             userNum2,
-            userNum2Dec ? "." : "",
+            userNum2Dec && (!userOperator || userNum2DecPlaces)  ? "." : "",
             userNum2DecPlaces ? userNum2DecPlaces : ""
         ]
             .filter(item => item != null)
